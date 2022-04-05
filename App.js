@@ -1,7 +1,7 @@
 // 출처: https://maaani.tistory.com/158 [생각의 전환]
-import React from 'react';
-import {View} from 'react-native';
-import {Calendar, LocaleConfig} from 'react-native-calendars';
+import React, {useState} from 'react';
+import {View, Text, Button, Modal, StyleSheet} from 'react-native';
+import {CalendarList, LocaleConfig} from 'react-native-calendars';
 
 LocaleConfig.locales['kr'] = {
   monthNames: [
@@ -45,8 +45,11 @@ LocaleConfig.locales['kr'] = {
 LocaleConfig.defaultLocale = 'kr';
 
 export default () => {
-  const [markedDates, setMarkedDates] = React.useState(null);
-  const [dates, setDates] = React.useState(['2022-01-05', '2022-01-20']);
+  const [markedDates, setMarkedDates] = useState(null);
+  const [dates, setDates] = useState(['2022-01-05', '2022-01-20']);
+  const [isModalActive, setIsModalActive] = useState(false);
+  const [selectDate, setSelectDate] = useState(false);
+
   function addDates(day) {
     dates.push(day.dateString);
     let obj = dates.reduce(
@@ -56,14 +59,20 @@ export default () => {
         }),
       {},
     );
+    console.log('day', day.dateString);
     console.log(obj);
     setMarkedDates(obj);
+    setIsModalActive(!isModalActive);
+    setSelectDate(day.dateString);
   }
   return (
     <>
       <View>
-        <Calendar
-          // style={[styles.calendar, {height: 300}]}
+        <CalendarList
+          // Enable horizontal scrolling, default = false
+          horizontal={true}
+          // Enable paging on horizontal, default = false
+          pagingEnabled={true}
           theme={{
             'stylesheet.calendar.header': {
               dayTextAtIndex0: {
@@ -78,9 +87,63 @@ export default () => {
           onDayPress={day => {
             addDates(day);
           }}
-          markedDates={markedDates}
-        />
+          markedDates={markedDates}></CalendarList>
+        <Modal visible={isModalActive} animationType={'fade'}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{selectDate}</Text>
+              <Button
+                style={styles.button}
+                title="back"
+                onPress={() => setIsModalActive(false)}></Button>
+            </View>
+          </View>
+        </Modal>
       </View>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#2196F3',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+});
