@@ -1,4 +1,5 @@
 // 출처: https://maaani.tistory.com/158 [생각의 전환]
+import 'react-native-gesture-handler';
 import React, {useState} from 'react';
 import {View, Text, Button, Modal, TextInput, StyleSheet} from 'react-native';
 import {CalendarList, LocaleConfig} from 'react-native-calendars';
