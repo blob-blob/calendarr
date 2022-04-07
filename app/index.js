@@ -54,16 +54,7 @@ export default () => {
 
     function addDates(day) {
         dates.push(day.dateString);
-        let obj = dates.reduce(
-            (c, v) =>
-                Object.assign(c, {
-                    [v]: { marked: true, dotColor: 'red' }, // todo 추가할거만
-                }),
-            {},
-        );
-        console.log('day', day.dateString);
-        console.log(obj);
-        setMarkedDates(obj);
+        console.log('dates', dates);
         setIsModalActive(!isModalActive);
         setSelectDate(day.dateString);
     }
@@ -112,21 +103,18 @@ export default () => {
                                 style={styles.button}
                                 title="back"
                                 onPress={() => {
-                                    let obj = dates.reduce(
-                                        (c, v) =>
-                                            Object.assign(c, {
-                                                [v]: {
-                                                    marked: true,
-                                                    dotColor: 'red',
-                                                    memo:
-                                                        v == selectDate
-                                                            ? textValue
-                                                            : '', // todo추가만
-                                                },
-                                            }),
-                                        {},
-                                    );
-                                    setMarkedDates(obj);
+                                    console.log('markedDates', markedDates);
+                                    if (textValue) {
+                                        let obj = {
+                                            ...markedDates,
+                                            [selectDate]: {
+                                                marked: true,
+                                                dotColor: 'red',
+                                                memo: textValue,
+                                            },
+                                        };
+                                        setMarkedDates(obj);
+                                    }
                                     setIsModalActive(false);
                                     setTextValue();
                                 }}
