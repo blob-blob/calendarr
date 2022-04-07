@@ -55,6 +55,15 @@ export default () => {
     function addDates(day) {
         dates.push(day.dateString);
         console.log('dates', dates);
+        console.log(
+            'markedDates',
+            '1',
+            markedDates && markedDates[selectDate],
+            '2',
+            (markedDates && markedDates[selectDate]) || {},
+            '3',
+            ((markedDates && markedDates[selectDate]) || {}).memo,
+        );
         setIsModalActive(!isModalActive);
         setSelectDate(day.dateString);
     }
@@ -87,8 +96,14 @@ export default () => {
                         <View style={styles.modalView}>
                             <Text style={styles.modalText}>{selectDate}</Text>
                             <TextInput
-                                value={textValue}
-                                // value={() => dates[selectDate].memo}
+                                // value={textValue}
+                                value={
+                                    (
+                                        (markedDates &&
+                                            markedDates[selectDate]) ||
+                                        {}
+                                    ).memo
+                                }
                                 // object 내용으로 보여주기
                                 style={styles.input}
                                 onChangeText={event => {
@@ -103,7 +118,6 @@ export default () => {
                                 style={styles.button}
                                 title="back"
                                 onPress={() => {
-                                    console.log('markedDates', markedDates);
                                     if (textValue) {
                                         let obj = {
                                             ...markedDates,
