@@ -19,10 +19,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // redux 개발자도구와 미들웨어를 사용하기 위해
 // __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: 크롬 확장프로그램에 작성되어있는 자바스크립트 함수.
 
-const StoreWithMiddelware = createStore(
-    reducers,
-    composeEnhancers(applyMiddleware(promiseMiddleware)),
-);
+const StoreWithMiddelware = createStore(reducers, composeEnhancers(applyMiddleware(promiseMiddleware)));
 
 const Calrendarr = () => (
     <Provider store={StoreWithMiddelware}>
